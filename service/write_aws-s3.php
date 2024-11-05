@@ -1,12 +1,7 @@
 <?php
-/*************************************************************************
-         (C) Copyright AudioLabs 2017 
 
-This source code is protected by copyright law and international treaties. This source code is made available to You subject to the terms and conditions of the Software License for the webMUSHRA.js Software. Said terms and conditions have been made available to You prior to Your download of this source code. By downloading this source code You agree to be bound by the above mentionend terms and conditions, which can also be found here: https://www.audiolabs-erlangen.de/resources/webMUSHRA. Any unauthorised use of this source code may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under law. 
-
-**************************************************************************/
 // Allow CORS for requests from your GitHub Pages URL
-header("Access-Control-Allow-Origin: https://mcomunita.github.io");
+header("Access-Control-Allow-Origin: https://yourusername.github.io");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
@@ -15,18 +10,22 @@ require 'vendor/autoload.php'; // Include the Composer autoload file
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 
-// Set up AWS S3 client
+// AWS S3 configuration
+$bucketName = 'YOUR_BUCKET_NAME';  // Replace with your S3 bucket name
+$region = 'YOUR_BUCKET_REGION';     // Replace with your S3 bucket region
+$accessKey = 'YOUR_ACCESS_KEY';     // Replace with your Access Key ID
+$secretKey = 'YOUR_SECRET_KEY';     // Replace with your Secret Access Key
+$filepathPostfix = ".csv";
+
+// Initialize S3 client
 $s3Client = new S3Client([
   'version' => 'latest',
-  'region'  => 'eu-north-1', // e.g., us-west-2
+  'region' => $region,
   'credentials' => [
-      'key'    => 'AKIAT7JJUZWHENG3K6S2',
-      'secret' => 'QAQWIC5tZPGmb6BSyq9wcXZyGwIx9/CrOknJ41DB',
+      'key' => $accessKey,
+      'secret' => $secretKey,
   ],
 ]);
-
-$bucketName = 'mushra-results'; // Your S3 bucket name
-$filepathPostfix = ".csv";
 
 // Create and upload CSV data to S3
 function uploadToS3($s3Client, $bucketName, $key, $data) {
